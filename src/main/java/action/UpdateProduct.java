@@ -1,12 +1,14 @@
 package action;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.BDSimulator;
+import dao.ProductDAO;
+import factory.ConnectionFactory;
 
 public class UpdateProduct implements Action {
 
@@ -21,8 +23,9 @@ public class UpdateProduct implements Action {
 		String paramQuantity = request.getParameter("quantity");
 		Integer quantity = Integer.parseInt(paramQuantity);
 		
-		BDSimulator connection = new BDSimulator();
-		connection.update(id, paramName, quantity);
+		Connection con = new ConnectionFactory().getConnection();
+		ProductDAO productDAO = new ProductDAO(con);
+		productDAO.update(id, paramName, quantity);
 
 		return "redirect:ListProduct";
 

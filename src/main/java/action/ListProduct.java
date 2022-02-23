@@ -1,22 +1,25 @@
 package action;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import model.BDSimulator;
+import dao.ProductDAO;
+import factory.ConnectionFactory;
 import model.Product;
 
 public class ListProduct implements Action {
 
 	@Override
 	public String go(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		BDSimulator connection = new BDSimulator();
-		List<Product> productList = connection.getProductList();
+		
+		Connection con = new ConnectionFactory().getConnection();
+		ProductDAO productDAO = new ProductDAO(con);
+		List<Product> productList = productDAO.retrieveAll();
 
 		request.setAttribute("products", productList);
 
